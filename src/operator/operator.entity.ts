@@ -7,8 +7,8 @@ import {
 
 @Entity('operator')
 export class OperatorEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @CreateDateColumn()
   created: Date;

@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { OperatorModule } from './operator/operator.module';
+
 
 import 'dotenv/config';
 
@@ -27,6 +28,7 @@ const logging = process.env.DB_LOGGING === 'true';
       synchronize,
       logging
     }),
+    OperatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
