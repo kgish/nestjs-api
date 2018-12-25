@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -22,16 +22,28 @@ export class OperatorService {
   }
 
   async findOne(id: string): Promise<OperatorEntity> {
-    return await this.operatorRepository.findOne({ where: { id } });
+    const operator = await this.operatorRepository.findOne({ where: { id } });
+    if (!operator) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    return operator;
   }
 
   async update(id: string, data: Partial<OperatorDto>): Promise<OperatorEntity> {
+    const operator = await this.operatorRepository.findOne({ where: { id } });
+    if (!operator) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     await this.operatorRepository.update({ id }, data);
-    return await this.operatorRepository.findOne({ where: { id } });
+    return operator;
   }
 
   async delete(id: string): Promise<any> {
+    const operator = await this.operatorRepository.findOne({ where: { id } });
+    if (!operator) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     await this.operatorRepository.delete({ id });
-    return { deleted: true };
+    return operator;
   }
 }
