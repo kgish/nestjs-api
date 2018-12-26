@@ -30,11 +30,12 @@ export class OperatorService {
   }
 
   async update(id: string, data: Partial<OperatorDto>): Promise<OperatorEntity> {
-    const operator = await this.operatorRepository.findOne({ where: { id } });
+    let operator = await this.operatorRepository.findOne({ where: { id } });
     if (!operator) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
     await this.operatorRepository.update({ id }, data);
+    operator = await this.operatorRepository.findOne({ where: { id } });
     return operator;
   }
 
