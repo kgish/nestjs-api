@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
 import { OperatorModule } from './operator/operator.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { UserModule } from './user/user.module';
 
 import 'dotenv/config';
 
@@ -33,6 +32,7 @@ const logging = process.env.DB_LOGGING === 'true';
       logging,
     }),
     OperatorModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
