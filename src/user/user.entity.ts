@@ -3,13 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
-import { UserResponseObject } from './interfaces/user-ro.interface';
+import { UserRO } from './interfaces/user-ro.interface';
+import { OperatorEntity } from '../operator/operator.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -28,14 +30,17 @@ export class UserEntity {
   @Column('text')
   password: string;
 
+  @ManyToOne(type => OperatorEntity, operator => operator.users)
+  operator: OperatorEntity;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
-  toResponseObject(showToken: boolean = true): UserResponseObject {
+  toResponseObject(showToken: boolean = true): UserRO {
     const { id, created, username, token } = this;
-    const responseObject: UserResponseObject = { id, created, username };
+    const responseObject: UserRO = { id, created, username };
     if (showToken) {
       responseObject.token = token;
     }
@@ -50,6 +55,6 @@ export class UserEntity {
     const { id, username } = this;
     return jwt.sign({
       id, username
-    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES || '30m'});
+    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES || '30m' });
   }
 }

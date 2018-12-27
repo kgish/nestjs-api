@@ -4,20 +4,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserEntity } from './user.entity';
 import { UserDto } from './dto/user.dto';
-import { UserResponseObject } from './interfaces/user-ro.interface';
+import { UserRO } from './interfaces/user-ro.interface';
+import { OperatorEntity } from '../operator/operator.entity';
 
 @Injectable()
 export class UserService {
 
-  constructor(@InjectRepository(UserEntity) private userRepository: Repository<UserEntity>) {
+  constructor(
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
+    @InjectRepository(OperatorEntity)
+    private operatorRepository: Repository<OperatorEntity>) {
   }
 
-  async findAll(): Promise<UserResponseObject[]> {
-    const users = await this.userRepository.find();
+  async findAll(): Promise<UserRO[]> {
+    const users = await this.userRepository.find({ relations: ['operator'] });
     return users.map(user => user.toResponseObject(false));
   }
 
-  async login(data: UserDto): Promise<UserResponseObject> {
+  async login(data: UserDto): Promise<UserRO> {
     const { username, password } = data;
     const user = await this.userRepository.findOne({ where: { username } });
     if (!user || (!await user.comparePassword(password))) {
@@ -26,7 +31,7 @@ export class UserService {
     return user.toResponseObject();
   }
 
-  async register(data: UserDto): Promise<UserResponseObject> {
+  async register(data: UserDto): Promise<UserRO> {
     const { username } = data;
     let user = await this.userRepository.findOne({ where: { username } });
 

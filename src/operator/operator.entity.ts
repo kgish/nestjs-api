@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { UserEntity } from '../user/user.entity';
 
 @Entity('operator')
 export class OperatorEntity {
@@ -18,4 +21,7 @@ export class OperatorEntity {
 
   @Column()
   name: string;
+
+  @OneToMany(type => UserEntity, user => user.operator)
+  users: UserEntity[];
 }

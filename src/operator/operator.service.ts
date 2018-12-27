@@ -4,25 +4,31 @@ import { Repository } from 'typeorm';
 
 import { OperatorDto } from './dto/operator.dto';
 import { OperatorEntity } from './operator.entity';
+import { UserEntity } from '../user/user.entity';
+import { OperatorRO } from './interfaces/operator-ro.interface';
 
 @Injectable()
 export class OperatorService {
 
-  constructor(@InjectRepository(OperatorEntity) private operatorRepository: Repository<OperatorEntity>) {
+  constructor(
+    @InjectRepository(OperatorEntity)
+    private operatorRepository: Repository<OperatorEntity>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>) {
   }
 
-  async create(data: OperatorDto) {
+  async create(data: OperatorDto): Promise<OperatorRO> {
     const operator = await this.operatorRepository.create(data);
     await this.operatorRepository.save(operator);
     return operator;
   }
 
   async findAll(): Promise<OperatorEntity[]> {
-    return await this.operatorRepository.find();
+    return await this.operatorRepository.find({ relations: ['users']});
   }
 
   async findOne(id: string): Promise<OperatorEntity> {
-    const operator = await this.operatorRepository.findOne({ where: { id } });
+    const operator = await this.operatorRepository.findOne({ where: { id }, relations: ['users'] });
     if (!operator) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
