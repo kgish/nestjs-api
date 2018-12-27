@@ -5,20 +5,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
 import { UserDto } from './dto/user.dto';
 import { UserRO } from './interfaces/user-ro.interface';
-import { OperatorEntity } from '../operator/operator.entity';
 
 @Injectable()
 export class UserService {
 
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-    @InjectRepository(OperatorEntity)
-    private operatorRepository: Repository<OperatorEntity>) {
+    private userRepository: Repository<UserEntity>) {
   }
 
   async findAll(): Promise<UserRO[]> {
-    const users = await this.userRepository.find({ relations: ['operator'] });
+    const users = await this.userRepository.find();
     return users.map(user => user.toResponseObject(false));
   }
 

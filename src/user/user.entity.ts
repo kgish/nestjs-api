@@ -55,6 +55,6 @@ export class UserEntity {
     const { id, username } = this;
     return jwt.sign({
       id, username
-    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES || '30m' });
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
   }
 }
