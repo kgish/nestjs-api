@@ -28,6 +28,7 @@
     "class-validator": "^0.9.1",
     "dotenv": "^6.2.0",
     "jsonwebtoken": "^8.4.0",
+    "nestjs-config": "^1.2.9-alpha",
     "pg": "^7.7.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.2",

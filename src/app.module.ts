@@ -7,7 +7,9 @@ import { OperatorModule } from './operator/operator.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { UserModule } from './user/user.module';
+import { ConfigModule } from 'nestjs-config';
 
+import * as path from 'path';
 import 'dotenv/config';
 
 const port = +process.env.DB_PORT || 5432;
@@ -20,6 +22,9 @@ const logging = process.env.DB_LOGGING === 'true';
 
 @Module({
   imports: [
+    ConfigModule.load(
+      path.resolve(__dirname, 'config/**/*.{ts,js}'),
+    ),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host,
