@@ -50,6 +50,6 @@ export class UserEntity {
     const { id, username } = this;
     return jwt.sign({
       id, username
-    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES || '7d'});
+    }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES || '30m'});
   }
 }
