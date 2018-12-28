@@ -20,6 +20,11 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @Post('user/:id/operator/:op')
+  updateOperator(@Param('id') id: string, @Param('op') op: string): Promise<UserEntity> {
+    return this.userService.updateOperator(id, op);
+  }
+
   @Post('login')
   @UsePipes(new ValidationPipe())
   login(@Body() data: UserDto) {

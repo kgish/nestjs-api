@@ -30,6 +30,20 @@ export class UserService {
     return user;
   }
 
+  async updateOperator(id: string, op: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id }, relations: ['operator'] });
+    if (!user) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    const operator = await this.operatorRepository.findOne({ where: { id: op }, relations: ['users'] });
+    if (!operator) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    user.operator = operator;
+    await this.userRepository.update({ id }, user);
+    return user;
+  }
+
   async login(data: UserDto): Promise<UserRO> {
     const { username, password } = data;
     const user = await this.userRepository.findOne({ where: { username } });
