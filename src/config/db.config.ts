@@ -7,5 +7,5 @@ export default {
   port: +process.env.DB_PORT || 5432,
   synchronize: process.env.DB_SYNCHRONIZE === 'true',
   logging: process.env.DB_LOGGING === 'true',
-  entities: [__dirname, '/**/*.entity.{ts,js}']
+  entities: [__dirname + '/**/*.entity.{ts,js}']
 };
