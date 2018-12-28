@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-import { IOperator, operators } from './data/operators.data';
+import { IOperator, Operators } from './data/operators.data';
 
-export class PopulateOperatorsTable1545995165894 implements MigrationInterface {
+export class PopulateOperatorTable1545995165894 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     queryRunner.query('DELETE FROM operator');
-    operators.forEach(operator => {
+    Operators.forEach((operator: IOperator) => {
       operator.contract.forEach(contract => {
         queryRunner.query(`INSERT INTO operator (code, name) VALUES ('${contract}','${operator.name}');`);
       });
@@ -14,6 +14,7 @@ export class PopulateOperatorsTable1545995165894 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
+    queryRunner.query('DELETE FROM operator');
   }
 
 }

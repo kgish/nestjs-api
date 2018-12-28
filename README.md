@@ -50,10 +50,6 @@ $ ts-node ./node_modules/typeorm/cli.js migration:generate -n CreateOperatorsTab
 
 Run migration:
 ```
-$ ts-node ./node_modules/typeorm/cli.js migration:run
+$ yarn migration:run
 
 ```
-
-## License
-
-  [MIT licensed](LICENSE).

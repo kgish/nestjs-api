@@ -7,7 +7,7 @@ export interface IOperator {
   url: string;
 }
 
-export const operators: IOperator[] = [
+export const Operators: IOperator[] = [
   {
     contract: [
       '12CONNECT'
@@ -318,7 +318,7 @@ export const operators: IOperator[] = [
     name: 'Maxitel',
     description: 'Maxitel',
     phone: '0172-754000',
-    'email': 'info@maxitel.nl',
+    email: 'info@maxitel.nl',
     url: 'https://www.maxitel.nl'
   },
   {
@@ -382,7 +382,7 @@ export const operators: IOperator[] = [
     name: 'OneXS Nederland B.V.',
     description: 'OneXS Nederland B.V.',
     phone: '088-5005030',
-    'email': 'levering@onexs.com',
+    email: 'levering@onexs.com',
     url: 'https://www.deanone.nl '
   },
   {
@@ -491,7 +491,7 @@ export const operators: IOperator[] = [
     name: 'Schiphol Telematics',
     description: 'Schiphol Telematics',
     phone: '0800-6570657',
-    'email': 'cs@st.nl',
+    email: 'cs@st.nl',
     url: 'https://www.st.nl'
   },
   {
