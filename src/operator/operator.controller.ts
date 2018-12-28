@@ -19,7 +19,7 @@ import { ValidationPipe } from '../common/pipes/validation.pipe';
 @Controller('operator')
 export class OperatorController {
 
-  private logger = new Logger('OperatorController')
+  private logger = new Logger('OperatorController');
 
   constructor(private operatorService: OperatorService) {
   }

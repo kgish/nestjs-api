@@ -17,7 +17,7 @@ export class OperatorService {
     private userRepository: Repository<UserEntity>) {
   }
 
-  async create(data: OperatorDto): Promise<OperatorRO> {
+  async create(data: OperatorDto): Promise<OperatorEntity> {
     const operator = await this.operatorRepository.create(data);
     await this.operatorRepository.save(operator);
     return operator;
