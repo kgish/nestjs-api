@@ -42,14 +42,29 @@ $ npm run test:cov
 
 ## Migrations
 
-Create migration:
+Create a new empty migration:
 ```
-$ ts-node ./node_modules/typeorm/cli.js migration:generate -n CreateOperatorsTable
+$ ts-node ./node_modules/typeorm/cli.js migration:create -n NameOfMigration
 
 ```
 
-Run migration:
+Generate a migration from current schemas:
+```
+$ ts-node ./node_modules/typeorm/cli.js migration:generate -n NameOfMigration
+
+```
+
+Run all the migrations:
 ```
 $ yarn migration:run
 
 ```
+
+## References
+
+* [NestJS](https://nestjs.com)
+* [Developing Backend APIs with Nest.js](https://auth0.com/blog/full-stack-typescript-apps-part-1-developing-backend-apis-with-nestjs)
+* [JWT](https://github.com/nestjs/jwt)
+* [Typeorm](https://github.com/typeorm/typeorm)
+* [Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
+* [Faker](https://github.com/marak/Faker.js)

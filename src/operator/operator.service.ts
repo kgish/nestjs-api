@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { OperatorDto } from './dto/operator.dto';
 import { OperatorEntity } from './operator.entity';
 import { UserEntity } from '../user/user.entity';
-import { OperatorRO } from './interfaces/operator-ro.interface';
 
 @Injectable()
 export class OperatorService {

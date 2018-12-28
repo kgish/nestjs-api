@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from 'nestjs-config';
 
 import * as path from 'path';
+import * as fs from 'fs';
 import 'dotenv/config';
 
 const port = +process.env.DB_PORT || 5432;
@@ -17,8 +18,15 @@ const host = process.env.DB_HOST || 'localhost';
 const username = process.env.DB_USERNAME || 'nestjs';
 const password = process.env.DB_PASSWORD || 'nestjs';
 const database = process.env.DB_DATABASE || 'nestjs';
-const synchronize = process.env.DB_SYNCHRONIZE === 'true';
-const logging = process.env.DB_LOGGING === 'true';
+const synchronize = process.env.DB_SYNCHRONIZE ? process.env.DB_SYNCHRONIZE === 'true' : true;
+const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : true;
+
+if (fs.existsSync(path.resolve(__dirname, '.env'))) {
+  Logger.log('Found .env', 'AppModule');
+} else {
+  Logger.warn('WARNING: Cannot find .env', 'AppModule');
+}
+Logger.log(`${JSON.stringify({port, host, username, database, synchronize, logging})}`, 'AppModule');
 
 @Module({
   imports: [
