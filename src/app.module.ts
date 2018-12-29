@@ -21,13 +21,15 @@ const database = process.env.DB_DATABASE || 'nestjs';
 const synchronize = process.env.DB_SYNCHRONIZE ? process.env.DB_SYNCHRONIZE === 'true' : true;
 const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : true;
 
+const logger = new Logger('AppModule');
+
 const dotenv = path.resolve(__dirname, '..', '.env');
 if (fs.existsSync(dotenv)) {
-  Logger.log(`Found .env at ${dotenv}`, 'AppModule');
+  logger.log(`Found .env at ${dotenv}`);
 } else {
-  Logger.warn(`WARNING: Cannot find .env at ${dotenv}`, 'AppModule');
+  logger.warn(`WARNING: Cannot find .env at ${dotenv}`);
 }
-Logger.log(`Config = ${JSON.stringify({port, host, username, database, synchronize, logging})}`, 'AppModule');
+logger.log(`Database => ${JSON.stringify({port, host, username, database, synchronize, logging})}`);
 
 @Module({
   imports: [
