@@ -3,6 +3,7 @@ import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@n
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { UserEntity } from './user.entity';
+import { UserRO } from './interfaces/user-ro.interface';
 
 @Controller()
 export class UserController {
@@ -16,13 +17,8 @@ export class UserController {
   }
 
   @Get('user/:id')
-  findOne(@Param('id') id: string): Promise<UserEntity> {
+  findOne(@Param('id') id: string): Promise<UserRO> {
     return this.userService.findOne(id);
-  }
-
-  @Post('user/:id/operator/:op')
-  updateOperator(@Param('id') id: string, @Param('op') op: string): Promise<UserEntity> {
-    return this.userService.updateOperator(id, op);
   }
 
   @Post('login')

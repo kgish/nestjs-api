@@ -19,29 +19,15 @@ export class UserService {
 
   async findAll(): Promise<UserRO[]> {
     const users = await this.userRepository.find({ relations: ['operator'] });
-    return users.map(user => user.toResponseObject(false));
+    return users.map(user => user.toResponseObject());
   }
 
-  async findOne(id: string): Promise<UserEntity> {
+  async findOne(id: string): Promise<UserRO> {
     const user = await this.userRepository.findOne({ where: { id }, relations: ['operator'] });
     if (!user) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    return user;
-  }
-
-  async updateOperator(id: string, op: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id }, relations: ['operator'] });
-    if (!user) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    }
-    const operator = await this.operatorRepository.findOne({ where: { id: op }, relations: ['users'] });
-    if (!operator) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    }
-    user.operator = operator;
-    await this.userRepository.update({ id }, user);
-    return user;
+    return user.toResponseObject();
   }
 
   async login(data: UserDto): Promise<UserRO> {
@@ -50,7 +36,7 @@ export class UserService {
     if (!user || (!await user.comparePassword(password))) {
       throw new HttpException('Invalid username/password', HttpStatus.FORBIDDEN);
     }
-    return user.toResponseObject();
+    return user.toResponseObject(true);
   }
 
   async register(data: UserDto): Promise<UserRO> {
@@ -63,6 +49,6 @@ export class UserService {
 
     user = await this.userRepository.create(data);
     await this.userRepository.save(user);
-    return user.toResponseObject();
+    return user.toResponseObject(true);
   }
 }

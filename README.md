@@ -67,4 +67,5 @@ $ yarn migration:run
 * [JWT](https://github.com/nestjs/jwt)
 * [Typeorm](https://github.com/typeorm/typeorm)
 * [Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
+* [PassportJS](http://www.passportjs.org)
 * [Faker](https://github.com/marak/Faker.js)
