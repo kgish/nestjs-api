@@ -18,6 +18,9 @@ async function bootstrap() {
     .setHost(hostDomain.split('//')[1])
     .setSchemes(AppModule.isDev ? 'http' : 'https')
     .setBasePath(prefix)
+    .addTag('operator')
+    .addTag('user')
+    .addTag('auth')
     .addBearerAuth('Authorization', 'header')
     .build();
 

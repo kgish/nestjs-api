@@ -5,12 +5,13 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
-import { UserRO } from './interfaces/user-ro.interface';
+import { UserRO, Role } from './interfaces/user-ro.interface';
 import { OperatorEntity } from '../operator/operator.entity';
 
 @Entity('user')
@@ -21,6 +22,9 @@ export class UserEntity {
   @CreateDateColumn()
   created: Date;
 
+  @UpdateDateColumn()
+  updated: Date;
+
   @Column({
     type: 'text',
     unique: true,
@@ -29,6 +33,9 @@ export class UserEntity {
 
   @Column('text')
   password: string;
+
+  @Column()
+  role: Role;
 
   @ManyToOne(type => OperatorEntity, operator => operator.users)
   operator: OperatorEntity;
@@ -39,8 +46,8 @@ export class UserEntity {
   }
 
   toResponseObject(showToken: boolean = false): UserRO {
-    const { id, created, username, token } = this;
-    const responseObject: UserRO = { id, created, username };
+    const { id, created, updated, username, role, token } = this;
+    const responseObject: UserRO = { id, created, updated, username, role };
     if (showToken) {
       responseObject.token = token;
     }
@@ -54,7 +61,7 @@ export class UserEntity {
   private get token() {
     const { id, username } = this;
     return jwt.sign({
-      id, username
+      id, username,
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
   }
 }

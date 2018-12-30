@@ -4,18 +4,14 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
+import { BaseEntity } from '../common/base.entity';
 
 @Entity('operator')
-export class OperatorEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @CreateDateColumn()
-  created: Date;
-
+export class OperatorEntity extends BaseEntity {
   @Column({ unique: true })
   code: string;
 

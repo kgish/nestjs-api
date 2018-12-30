@@ -11,7 +11,7 @@
     "src/**/*.entity.{js,ts}"
   ],
   "migrations": [
-    "src/migration/**/*.{js,ts}"
+    "src/migration/*.{js,ts}"
   ],
   "migrationsTableName": "migrations",
   "cli": {
