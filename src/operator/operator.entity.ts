@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
-import { BaseEntity } from '../common/base.entity';
+import { ApiBaseEntity } from '../common/api-base.entity';
 
 @Entity('operator')
-export class OperatorEntity extends BaseEntity {
+export class OperatorEntity extends ApiBaseEntity {
   @Column({ unique: true })
   code: string;
 

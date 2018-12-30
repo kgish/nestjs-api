@@ -1,43 +1,26 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Logger
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 
-@Catch()
+@Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(error: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
-    const status = exception.getStatus ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const res = ctx.getResponse();
+    const req = ctx.getRequest();
 
-    const errorResponse = {
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      message:
-        status !== HttpStatus.INTERNAL_SERVER_ERROR
-          ? exception.message.error || exception.message || null
-          : 'Internal server error',
-    };
-
-    if (status !== HttpStatus.INTERNAL_SERVER_ERROR) {
-      Logger.error(
-        `${request.method} ${request.url}`,
-        exception.stack,
-        'HttpExceptionFilter');
-
-    } else {
-      Logger.error(
-        `${request.method} ${request.url}`,
-        JSON.stringify(errorResponse),
-        'HttpExceptionFilter');
+    if (error.getStatus() === HttpStatus.UNAUTHORIZED) {
+      if (typeof error.response !== 'string') {
+        error.response.message =
+          error.response.message || 'You do not have permission to access this resource';
+      }
     }
 
-    response.status(status).json(errorResponse);
+    res.status(error.getStatus()).json({
+      statusCode: error.getStatus(),
+      error: error.response.name || error.response.error || error.name,
+      message: error.response.message || error.response || error.message,
+      errors: error.response.errors || null,
+      timestamp: new Date().toISOString(),
+      path: req ? req.url : null,
+    });
   }
 }
