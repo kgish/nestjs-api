@@ -55,12 +55,29 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
   ],
 })
 export class AppModule {
+  static host: string;
   static port: number;
   static prefix: string;
+  static environment: string;
+  static isDev: boolean;
 
   constructor() {
     const logger = new Logger('AppModule');
     const dotenv = path.resolve(__dirname, '..', '.env');
+
+    AppModule.host = process.env.API_HOST || 'localhost';
+    AppModule.port = +process.env.API_PORT || 3000;
+    AppModule.prefix = process.env.API_PREFIX || 'api/v1';
+    AppModule.environment = process.env.NODE_ENV || 'development';
+    AppModule.isDev = AppModule.environment === 'development';
+
+    logger.log(`API => ${JSON.stringify({
+      host: AppModule.host,
+      port: AppModule.port,
+      prefix: AppModule.prefix,
+      environment: AppModule.environment,
+      isDev: AppModule.isDev,
+    })}`);
 
     if (fs.existsSync(dotenv)) {
       logger.log(`Found .env at ${dotenv}`);
@@ -70,9 +87,5 @@ export class AppModule {
 
     logger.log(`Database => ${JSON.stringify({ port, host, username, database, synchronize, logging })}`);
 
-    AppModule.port = +process.env.API_PORT || 3000;
-    AppModule.prefix = process.env.API_PREFIX || 'api/v1';
-
-    logger.log(`API => ${JSON.stringify({ port: AppModule.port, prefix: AppModule.prefix })}`);
   }
 }
