@@ -13,7 +13,7 @@ async function bootstrap() {
   // Swagger
   const swaggerOptions = new DocumentBuilder()
     .setTitle('NestJS API')
-    .setDescription('Simple Mock Server for Testing')
+    .setDescription('Simple Mock Server for Testing the Compliancy Platform Client App')
     .setVersion('0.0.1')
     .setHost(hostDomain.split('//')[1])
     .setSchemes(AppModule.isDev ? 'http' : 'https')

@@ -31,7 +31,7 @@ export class UserEntity {
   })
   username: string;
 
-  @Column('text')
+  @Column({ type: 'text', select: false})
   password: string;
 
   @Column()

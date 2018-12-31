@@ -23,8 +23,7 @@ export class OperatorService {
   }
 
   async findAll(): Promise<OperatorEntity[]> {
-    const operators = await this.operatorRepository.find({ relations: ['users'] });
-    return this._removePassword(operators);
+    return await this.operatorRepository.find({ relations: ['users'] });
   }
 
   async findOne(id: string): Promise<OperatorEntity> {
@@ -32,7 +31,7 @@ export class OperatorService {
     if (!operator) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    return this._removePassword([operator])[0];
+    return operator;
   }
 
   async update(id: string, data: Partial<OperatorDto>): Promise<OperatorEntity> {
@@ -54,18 +53,4 @@ export class OperatorService {
     return operator;
   }
 
-// Private
-
-  // Remove the password field from users
-  _removePassword(operators: OperatorEntity[]) {
-    operators.forEach(operator => {
-      if (operator) {
-        operator.users = operator.users.map(user => {
-          delete user.password;
-          return user;
-        });
-      }
-    });
-    return operators;
-  }
 }
