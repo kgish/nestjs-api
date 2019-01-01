@@ -8,7 +8,8 @@ import {
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import { UserRO, Role } from './interfaces/user-ro.interface';
+import { UserRO } from './interfaces/user-ro.interface';
+import { Role } from './interfaces/user-role.enum';
 import { OperatorEntity } from '../operator/operator.entity';
 import { BaseEntity } from '../common/base.entity';
 
