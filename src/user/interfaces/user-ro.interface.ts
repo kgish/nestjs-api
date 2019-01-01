@@ -1,4 +1,4 @@
-export type Role = 'admin' | 'support' | 'operator' | 'user';
+import { Role } from './user-role.enum';
 
 export class UserRO {
   id: string;

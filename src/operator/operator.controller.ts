@@ -3,10 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Logger,
   Param,
   Post,
-  Put,
+  Put, UseGuards,
   UsePipes,
 } from '@nestjs/common';
 
@@ -22,6 +23,12 @@ import { OperatorEntity } from './operator.entity';
 import { OperatorDto } from './dto/operator.dto';
 
 import { ValidationPipe } from '../common/pipes/validation.pipe';
+import { GetOperationId } from '../common/utilities/get-operation-id';
+import { ApiException } from '../common/api-exception';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '../user/interfaces/user-role.enum';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiBearerAuth()
 @ApiUseTags('operators')
@@ -34,48 +41,63 @@ export class OperatorController {
   }
 
   @Post()
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @UsePipes(new ValidationPipe())
-  @ApiOperation({ title: 'Create operator' })
-  @ApiResponse({ status: 201, description: 'Operator has been successfully created.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: OperatorEntity})
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+  @ApiOperation(GetOperationId(OperatorEntity.modelName, 'Create'))
   create(@Body() data: OperatorDto): Promise<OperatorEntity> {
     this.logger.log(JSON.stringify(data));
     return this.operatorService.create(data);
   }
 
   @Get()
-  @ApiOperation({ title: 'Get all operators' })
-  @ApiResponse({ status: 200, description: 'Success.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.admin, Role.support)
+  @ApiResponse({ status: HttpStatus.OK, type: OperatorEntity, isArray: true})
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+  @ApiOperation(GetOperationId(OperatorEntity.modelName, 'GetAll'))
   findAll(): Promise<OperatorEntity[]> {
     return this.operatorService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ title: 'Get operator by id' })
-  @ApiResponse({ status: 200, description: 'Success.' })
-  @ApiResponse({ status: 404, description: 'Not found.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Roles(Role.admin, Role.support)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @ApiResponse({ status: HttpStatus.OK, type: OperatorEntity})
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ApiException })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+  @ApiOperation(GetOperationId(OperatorEntity.modelName, 'GetOne'))
   findOne(@Param('id') id: string): Promise<OperatorEntity> {
     return this.operatorService.findOne(id);
   }
 
   @Put()
+  @Roles(Role.admin, Role.support)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @UsePipes(new ValidationPipe())
-  @ApiOperation({ title: 'Update operator by id' })
-  @ApiResponse({ status: 200, description: 'Success.' })
-  @ApiResponse({ status: 404, description: 'Not found.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: HttpStatus.OK, type: OperatorEntity})
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ApiException })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+  @ApiOperation(GetOperationId(OperatorEntity.modelName, 'Update'))
   update(@Param('id') id: string, @Body() data: Partial<OperatorDto>) {
     this.logger.log(JSON.stringify(data));
     return this.operatorService.update(id, data);
   }
 
   @Delete()
-  @ApiOperation({ title: 'Delete operator by id' })
-  @ApiResponse({ status: 200, description: 'Success.' })
-  @ApiResponse({ status: 404, description: 'Not found.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Roles(Role.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @ApiResponse({ status: HttpStatus.OK, type: OperatorEntity})
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: ApiException })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, type: ApiException })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, type: ApiException })
+  @ApiOperation(GetOperationId(OperatorEntity.modelName, 'Delete'))
   delete(@Param('id') id: string) {
     return this.operatorService.delete(id);
   }

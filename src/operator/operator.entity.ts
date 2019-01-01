@@ -12,6 +12,11 @@ import { BaseEntity } from '../common/base.entity';
 
 @Entity('operator')
 export class OperatorEntity extends BaseEntity {
+
+  // constructor() {
+  //   super();
+  // }
+
   @Column({ unique: true })
   code: string;
 
@@ -20,4 +25,8 @@ export class OperatorEntity extends BaseEntity {
 
   @OneToMany(type => UserEntity, user => user.operator)
   users: UserEntity[];
+
+  static get modelName(): string {
+    return 'Operator';
+  }
 }

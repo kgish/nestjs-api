@@ -1,4 +1,4 @@
-import { Role } from './user-ro.interface';
+import { Role } from './user-role.enum';
 
 export interface User {
   readonly username: string;

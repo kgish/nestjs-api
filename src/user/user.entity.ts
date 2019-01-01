@@ -11,6 +11,7 @@ import { sign } from 'jsonwebtoken';
 import { UserRO, Role } from './interfaces/user-ro.interface';
 import { OperatorEntity } from '../operator/operator.entity';
 import { BaseEntity } from '../common/base.entity';
+
 // import { ConfigService } from 'nestjs-config';
 
 @Entity('user')
@@ -23,7 +24,7 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'text', unique: true })
   username: string;
 
-  @Column({ type: 'text'})
+  @Column({ type: 'text' })
   password: string;
 
   @Column()
@@ -55,7 +56,7 @@ export class UserEntity extends BaseEntity {
     const { id, username, role } = this;
     return sign({
       id, username, role,
-    },  process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
     // }, this.config.get('jwt.secret'), { expiresIn: this.config.get('jwt.expires') });
   }
 

@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { UserLoginDto } from './dto';
 import { UserRegisterDto } from './dto';
 import { GetOperationId } from '../common/utilities/get-operation-id';
-import { ApiException } from '../common/api-exception.entity';
+import { ApiException } from '../common/api-exception';
 import { UserEntity } from './user.entity';
 import { UserRO } from './interfaces/user-ro.interface';
 

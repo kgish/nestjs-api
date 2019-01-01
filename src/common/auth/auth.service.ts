@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { sign, SignOptions } from 'jsonwebtoken';
-import { ConfigService } from 'nestjs-config';
+// import { ConfigService } from 'nestjs-config';
 import { UserService } from '../../user/user.service';
 import { JwtPayload } from './jwt-payload.model';
 import { UserRO } from '../../user/interfaces/user-ro.interface';
@@ -13,10 +13,12 @@ export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService))
     readonly userService: UserService,
-    private readonly config: ConfigService,
+    // private readonly config: ConfigService,
   ) {
-    this.jwtOptions = { expiresIn: config.get('jwt.expires') };
-    this.jwtKey = config.get('jwt.secret');
+    // this.jwtOptions = { expiresIn: config.get('jwt.expires') };
+    // this.jwtKey = config.get('jwt.secret');
+    this.jwtOptions = { expiresIn: process.env.JWT_EXPIRES };
+    this.jwtKey = process.env.JWT_SECRET;
   }
 
   async signPayload(payload: JwtPayload): Promise<string> {
