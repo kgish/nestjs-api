@@ -24,8 +24,8 @@ import { OperatorDto } from './dto/operator.dto';
 import { ValidationPipe } from '../common/pipes/validation.pipe';
 
 @ApiBearerAuth()
-@ApiUseTags('operator')
-@Controller('operator')
+@ApiUseTags('operators')
+@Controller('operators')
 export class OperatorController {
 
   private logger = new Logger('OperatorController');

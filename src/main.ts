@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+
+// import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,9 +21,9 @@ async function bootstrap() {
     .setHost(hostDomain.split('//')[1])
     .setSchemes(AppModule.isDev ? 'http' : 'https')
     .setBasePath(prefix)
-    .addTag('operator')
-    .addTag('user')
-    .addTag('auth')
+    .addTag('root')
+    .addTag('operators')
+    .addTag('users')
     .addBearerAuth('Authorization', 'header')
     .build();
 
@@ -38,11 +41,13 @@ async function bootstrap() {
     swaggerOptions: {
       docExpansion: 'list',
       filter: true,
-      showRequestDuration: true
-    }
+      showRequestDuration: true,
+    },
   });
 
   app.setGlobalPrefix(prefix);
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   await app.listen(port);
 
   Logger.log(`Server running on ${hostDomain}`, 'bootstrap');

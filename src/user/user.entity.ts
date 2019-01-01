@@ -1,37 +1,29 @@
 import {
   BeforeInsert,
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
-import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import { hash, compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import { UserRO, Role } from './interfaces/user-ro.interface';
 import { OperatorEntity } from '../operator/operator.entity';
+import { BaseEntity } from '../common/base.entity';
+// import { ConfigService } from 'nestjs-config';
 
 @Entity('user')
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export class UserEntity extends BaseEntity {
 
-  @CreateDateColumn()
-  created: Date;
+  // constructor(private config: ConfigService) {
+  //   super();
+  // }
 
-  @UpdateDateColumn()
-  updated: Date;
-
-  @Column({
-    type: 'text',
-    unique: true,
-  })
+  @Column({ type: 'text', unique: true })
   username: string;
 
-  @Column({ type: 'text', select: false})
+  @Column({ type: 'text'})
   password: string;
 
   @Column()
@@ -42,26 +34,32 @@ export class UserEntity {
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await hash(this.password, 10);
   }
 
   toResponseObject(showToken: boolean = false): UserRO {
     const { id, created, updated, username, role, token } = this;
-    const responseObject: UserRO = { id, created, updated, username, role };
+    const userRO: UserRO = { id, created, updated, username, role };
     if (showToken) {
-      responseObject.token = token;
+      userRO.token = token;
     }
-    return responseObject;
+    return userRO;
   }
 
   async comparePassword(attempt: string) {
-    return await bcrypt.compare(attempt, this.password);
+    const result = await compare(attempt, this.password);
+    return result;
   }
 
   private get token() {
-    const { id, username } = this;
-    return jwt.sign({
-      id, username,
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
+    const { id, username, role } = this;
+    return sign({
+      id, username, role,
+    },  process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
+    // }, this.config.get('jwt.secret'), { expiresIn: this.config.get('jwt.expires') });
+  }
+
+  static get modelName(): string {
+    return 'User';
   }
 }

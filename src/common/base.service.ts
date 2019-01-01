@@ -1,7 +1,7 @@
-import { ApiBaseEntity } from './api-base.entity';
+import { BaseEntity } from './base.entity';
 import { Repository } from 'typeorm';
 
-export class ApiBaseService<T extends ApiBaseEntity> {
+export class BaseService<T extends BaseEntity> {
 
   constructor(
     public repository: Repository<T>,

@@ -3,9 +3,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserEntity } from './user.entity';
-import { UserDto } from './dto/user.dto';
 import { UserRO } from './interfaces/user-ro.interface';
 import { OperatorEntity } from '../operator/operator.entity';
+import { UserRegisterDto, UserLoginDto } from './dto';
+import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
@@ -30,16 +31,15 @@ export class UserService {
     return user.toResponseObject();
   }
 
-  async login(data: UserDto): Promise<UserRO> {
-    const { username, password } = data;
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (!user || (!await user.comparePassword(password))) {
-      throw new HttpException('Invalid username/password', HttpStatus.FORBIDDEN);
+  async findOneUsername(username: string): Promise<UserRO> {
+    const user = await this.userRepository.findOne({ where: { username }, relations: ['operator'] });
+    if (!user) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    return user.toResponseObject(true);
+    return user.toResponseObject();
   }
 
-  async register(data: UserDto): Promise<UserRO> {
+  async register(data: UserRegisterDto): Promise<UserRO> {
     const { username } = data;
     let user = await this.userRepository.findOne({ where: { username } });
 
@@ -47,8 +47,26 @@ export class UserService {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
 
-    user = await this.userRepository.create(data);
+    const createData: User = {
+      username: data.username,
+      password: data.password,
+      role: 'user',
+    };
+
+    user = await this.userRepository.create(createData);
     await this.userRepository.save(user);
+
+    return user.toResponseObject(true);
+  }
+
+  async login(data: UserLoginDto): Promise<UserRO> {
+    const { username, password } = data;
+    const user = await this.userRepository.findOne({ where: { username } });
+
+    if (!user || (!await user.comparePassword(password))) {
+      throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
+    }
+
     return user.toResponseObject(true);
   }
 }
