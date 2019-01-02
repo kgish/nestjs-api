@@ -3,10 +3,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserEntity } from './user.entity';
-import { UserRO } from './interfaces/user-ro.interface';
+import { UserRO, User, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
 import { UserRegisterDto, UserLoginDto } from './dto';
-import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
@@ -50,7 +49,7 @@ export class UserService {
     const createData: User = {
       username: data.username,
       password: data.password,
-      role: 'user',
+      role: Role.user
     };
 
     user = await this.userRepository.create(createData);

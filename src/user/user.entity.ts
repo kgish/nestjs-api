@@ -8,19 +8,27 @@ import {
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import { UserRO } from './interfaces/user-ro.interface';
-import { Role } from './interfaces/user-role.enum';
+import { UserRO, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
 import { BaseEntity } from '../common/base.entity';
 
 // import { ConfigService } from 'nestjs-config';
+import 'dotenv/config';
+import { Logger } from '@nestjs/common';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
 
+  private logger: Logger;
+
   // constructor(private config: ConfigService) {
   //   super();
   // }
+
+  constructor() {
+    super();
+    this.logger = new Logger('UsertEntity');
+  }
 
   @Column({ type: 'text', unique: true })
   username: string;
@@ -55,9 +63,12 @@ export class UserEntity extends BaseEntity {
 
   private get token() {
     const { id, username, role } = this;
+    const secret = process.env.JWT_SECRET;
+    const expiresIn = process.env.JWT_EXPIRES;
+    this.logger.log(`get token: id='${id}', username='${username}', role='${role}', secret='${secret}', expiresIn='${expiresIn}'`);
     return sign({
       id, username, role,
-    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
+    }, secret, { expiresIn });
     // }, this.config.get('jwt.secret'), { expiresIn: this.config.get('jwt.expires') });
   }
 

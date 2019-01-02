@@ -1,3 +1,6 @@
+// import { ConfigService } from 'nestjs-config';
+import 'dotenv/config';
+
 export default {
   type: 'postgres',
   host: process.env.DB_HOST,

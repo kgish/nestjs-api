@@ -3,15 +3,19 @@ import {
   CanActivate,
   ExecutionContext,
   HttpException,
-  HttpStatus,
+  HttpStatus, Logger,
 } from '@nestjs/common';
 
 import { Reflector } from '@nestjs/core';
-import { Role } from '../../user/interfaces/user-role.enum';
+import { Role } from '../../user/interfaces';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
+
+  private logger: Logger;
+
   constructor(private readonly reflector: Reflector) {
+    this.logger = new Logger('RolesGuard');
   }
 
   canActivate(context: ExecutionContext): boolean {

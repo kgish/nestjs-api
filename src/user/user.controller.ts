@@ -2,12 +2,11 @@ import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@n
 import { ApiUseTags, ApiBearerAuth, ApiCreatedResponse, ApiBadRequestResponse, ApiOperation } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
-import { UserLoginDto } from './dto';
-import { UserRegisterDto } from './dto';
+import { UserLoginDto, UserRegisterDto } from './dto';
 import { GetOperationId } from '../common/utilities/get-operation-id';
 import { ApiException } from '../common/api-exception';
 import { UserEntity } from './user.entity';
-import { UserRO } from './interfaces/user-ro.interface';
+import { UserRO } from './interfaces';
 
 @Controller()
 export class UserController {
