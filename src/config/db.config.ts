@@ -5,7 +5,7 @@ export default {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: +process.env.DB_PORT || 5432,
-  synchronize: process.env.DB_SYNCHRONIZE === 'true',
-  logging: process.env.DB_LOGGING === 'true',
+  synchronize: process.env.DB_SYNCHRONIZE ? process.env.DB_SYNCHRONIZE === 'true' : true,
+  logging: process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : true,
   entities: [__dirname + '/**/*.entity.{ts,js}']
 };

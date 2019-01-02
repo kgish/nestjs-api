@@ -1,60 +1,67 @@
 import {
   BeforeInsert,
   Column,
-  CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import { hash, compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import { UserRO } from './interfaces/user-ro.interface';
+import { Role } from './interfaces/user-role.enum';
 import { OperatorEntity } from '../operator/operator.entity';
+import { BaseEntity } from '../common/base.entity';
+
+// import { ConfigService } from 'nestjs-config';
 
 @Entity('user')
-export class UserEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export class UserEntity extends BaseEntity {
 
-  @CreateDateColumn()
-  created: Date;
+  // constructor(private config: ConfigService) {
+  //   super();
+  // }
 
-  @Column({
-    type: 'text',
-    unique: true,
-  })
+  @Column({ type: 'text', unique: true })
   username: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   password: string;
+
+  @Column()
+  role: Role;
 
   @ManyToOne(type => OperatorEntity, operator => operator.users)
   operator: OperatorEntity;
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await hash(this.password, 10);
   }
 
-  toResponseObject(showToken: boolean = true): UserRO {
-    const { id, created, username, token } = this;
-    const responseObject: UserRO = { id, created, username };
+  toResponseObject(showToken: boolean = false): UserRO {
+    const { id, created, updated, username, role, token } = this;
+    const userRO: UserRO = { id, created, updated, username, role };
     if (showToken) {
-      responseObject.token = token;
+      userRO.token = token;
     }
-    return responseObject;
+    return userRO;
   }
 
   async comparePassword(attempt: string) {
-    return await bcrypt.compare(attempt, this.password);
+    const result = await compare(attempt, this.password);
+    return result;
   }
 
   private get token() {
-    const { id, username } = this;
-    return jwt.sign({
-      id, username
+    const { id, username, role } = this;
+    return sign({
+      id, username, role,
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES || '30m' });
+    // }, this.config.get('jwt.secret'), { expiresIn: this.config.get('jwt.expires') });
+  }
+
+  static get modelName(): string {
+    return 'User';
   }
 }

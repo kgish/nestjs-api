@@ -4,8 +4,10 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger
+  Logger,
 } from '@nestjs/common';
+
+import { ApiException } from '../api-exception';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -15,27 +17,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception.getStatus ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const errorResponse = {
+    const errorResponse: ApiException = {
       statusCode: status,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toLocaleDateString(),
       path: request.url,
+      method: request.method,
       message:
         status !== HttpStatus.INTERNAL_SERVER_ERROR
           ? exception.message.error || exception.message || null
-          : 'Internal server error',
+          : 'Internal server error'
     };
 
-    if (status !== HttpStatus.INTERNAL_SERVER_ERROR) {
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
       Logger.error(
         `${request.method} ${request.url}`,
         exception.stack,
-        'HttpExceptionFilter');
-
+        'HttpExceptionFilter',
+      );
     } else {
       Logger.error(
         `${request.method} ${request.url}`,
         JSON.stringify(errorResponse),
-        'HttpExceptionFilter');
+        'HttpExceptionFilter',
+      );
     }
 
     response.status(status).json(errorResponse);

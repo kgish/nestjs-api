@@ -1,7 +1,13 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ApiUseTags, ApiBearerAuth, ApiCreatedResponse, ApiBadRequestResponse, ApiOperation } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
-import { UserDto } from './dto/user.dto';
+import { UserLoginDto } from './dto';
+import { UserRegisterDto } from './dto';
+import { GetOperationId } from '../common/utilities/get-operation-id';
+import { ApiException } from '../common/api-exception';
+import { UserEntity } from './user.entity';
+import { UserRO } from './interfaces/user-ro.interface';
 
 @Controller()
 export class UserController {
@@ -10,19 +16,36 @@ export class UserController {
   }
 
   @Get('users')
+  @ApiUseTags('users')
+  @ApiBearerAuth()
   findAll() {
     return this.userService.findAll();
   }
 
-  @Post('login')
-  @UsePipes(new ValidationPipe())
-  login(@Body() data: UserDto) {
-    return this.userService.login(data);
+  @Get('users/:id')
+  @ApiUseTags('users')
+  @ApiBearerAuth()
+  findOne(@Param('id') id: string): Promise<UserRO> {
+    return this.userService.findOne(id);
   }
 
   @Post('register')
+  @ApiUseTags('auth')
   @UsePipes(new ValidationPipe())
-  register(@Body() data: UserDto) {
+  @ApiCreatedResponse({ type: UserRegisterDto })
+  @ApiBadRequestResponse({ type: ApiException })
+  @ApiOperation(GetOperationId(UserEntity.modelName, 'Register'))
+  register(@Body() data: UserRegisterDto): Promise<UserRO> {
     return this.userService.register(data);
+  }
+
+  @Post('login')
+  @ApiUseTags('auth')
+  @UsePipes(new ValidationPipe())
+  @ApiCreatedResponse({ type: UserLoginDto })
+  @ApiBadRequestResponse({ type: ApiException })
+  @ApiOperation(GetOperationId(UserEntity.modelName, 'Login'))
+  login(@Body() data: UserLoginDto): Promise<UserRO> {
+    return this.userService.login(data);
   }
 }

@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { OperatorDto } from './dto/operator.dto';
 import { OperatorEntity } from './operator.entity';
 import { UserEntity } from '../user/user.entity';
-import { OperatorRO } from './interfaces/operator-ro.interface';
 
 @Injectable()
 export class OperatorService {
@@ -24,7 +23,7 @@ export class OperatorService {
   }
 
   async findAll(): Promise<OperatorEntity[]> {
-    return await this.operatorRepository.find({ relations: ['users']});
+    return await this.operatorRepository.find({ relations: ['users'] });
   }
 
   async findOne(id: string): Promise<OperatorEntity> {
@@ -53,4 +52,5 @@ export class OperatorService {
     await this.operatorRepository.delete({ id });
     return operator;
   }
+
 }
