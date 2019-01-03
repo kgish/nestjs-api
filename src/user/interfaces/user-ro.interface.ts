@@ -1,9 +1,9 @@
-import { Role } from './user-role.enum';
+import { UserRole } from './user-role.enum';
 
 export class UserRO {
   id: string;
   username: string;
-  role: Role;
+  role: UserRole;
   created: Date;
   updated: Date;
   token?: string;

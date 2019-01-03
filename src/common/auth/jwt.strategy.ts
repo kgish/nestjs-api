@@ -2,11 +2,14 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 
+import { Request } from 'express';
+import { use } from 'passport';
+
 // import { ConfigService } from 'nestjs-config';
 import 'dotenv/config';
 
-import { AuthService } from '../auth.service';
-import { JwtPayload } from '../jwt-payload.model';
+import { AuthService } from './auth.service';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -20,18 +23,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // secretOrKey: config.get('jwt.secret'),
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: process.env.JWT_SECRET || 'jwtsecret12345!',
     });
     this.logger = new Logger('JwtStrategy');
-    this.logger.log(`key='${process.env.JWT_SECRET}'`);
+    this.logger.log(`constructor() key='${process.env.JWT_SECRET || 'jwtsecret12345!'}'`);
   }
 
-  async validate(payload: JwtPayload, done: VerifiedCallback) {
-    const user = await this.auth.validatePayload(payload);
+  async validate(req: Request, payload: JwtPayload, done: VerifiedCallback) {
+    const user = await this.auth.validateUser(payload.username);
     if (!user) {
+      this.logger.log(`validate() payload='${JSON.stringify(payload)}', user='${JSON.stringify(user)}' => UNAUTHORIZED`);
       return done(new HttpException({}, HttpStatus.UNAUTHORIZED), false);
     }
 
-    return done(null, user, payload.iat);
+    this.logger.log(`validate() payload='${JSON.stringify(payload)}', user='${JSON.stringify(user)}' => OK`);
+    return done(null, user);
   }
 }

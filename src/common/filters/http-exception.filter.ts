@@ -11,6 +11,13 @@ import { ApiException } from '../api-exception';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+
+  logger: Logger;
+
+  constructor() {
+    this.logger = new Logger('HttpExceptionFilter');
+  }
+
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -25,20 +32,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message:
         status !== HttpStatus.INTERNAL_SERVER_ERROR
           ? exception.message.error || exception.message || null
-          : 'Internal server error'
+          : 'Internal server error',
     };
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
-      Logger.error(
+      this.logger.error(
         `${request.method} ${request.url}`,
         exception.stack,
-        'HttpExceptionFilter',
       );
     } else {
-      Logger.error(
-        `${request.method} ${request.url}`,
-        JSON.stringify(errorResponse),
-        'HttpExceptionFilter',
+      this.logger.error(
+        `${request.method} ${request.url} => ${JSON.stringify(errorResponse)}`,
       );
     }
 

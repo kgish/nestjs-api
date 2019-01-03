@@ -6,13 +6,12 @@ import { ConfigModule } from 'nestjs-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { AuthService } from './common/auth/auth.service';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { JwtStrategy } from './common/auth/strategies/jwt-strategy.service';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { AuthModule } from './common/auth/auth.module';
 import { OperatorModule } from './operator/operator.module';
 import { UserModule } from './user/user.module';
-import { UserService } from './user/user.service';
+
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -30,6 +29,7 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.load(
       path.resolve(__dirname, 'config/**/*.{ts,js}'),
     ),
@@ -50,8 +50,6 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
   controllers: [AppController],
   providers: [
     AppService,
-    AuthService,
-    UserService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
@@ -60,7 +58,6 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
-    JwtStrategy,
   ],
 })
 export class AppModule {

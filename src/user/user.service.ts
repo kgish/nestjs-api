@@ -3,8 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserEntity } from './user.entity';
-import { UserRO, User, Role } from './interfaces';
-import { OperatorEntity } from '../operator/operator.entity';
+import { UserRO, User, UserRole } from './interfaces';
 import { UserRegisterDto, UserLoginDto } from './dto';
 
 @Injectable()
@@ -12,9 +11,7 @@ export class UserService {
 
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-    @InjectRepository(OperatorEntity)
-    private operatorRepository: Repository<OperatorEntity>) {
+    private userRepository: Repository<UserEntity>) {
   }
 
   async findAll(): Promise<UserRO[]> {
@@ -49,7 +46,7 @@ export class UserService {
     const createData: User = {
       username: data.username,
       password: data.password,
-      role: Role.user
+      role: UserRole.user
     };
 
     user = await this.userRepository.create(createData);

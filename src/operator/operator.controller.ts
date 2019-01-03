@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Logger,
   Param,
   Post,
@@ -31,7 +30,7 @@ import { ValidationPipe } from '../common/pipes/validation.pipe';
 import { GetOperationId } from '../common/utilities/get-operation-id';
 import { ApiException } from '../common/api-exception';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Role } from '../user/interfaces';
+import { UserRole } from '../user/interfaces';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -46,8 +45,8 @@ export class OperatorController {
   }
 
   @Post()
-  @Roles(Role.admin)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.admin)
+  @UseGuards(AuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
@@ -59,8 +58,8 @@ export class OperatorController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.admin, Role.support)
+  @Roles(UserRole.admin, UserRole.support)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity, isArray: true })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiForbiddenResponse({ type: ApiException })
@@ -70,8 +69,8 @@ export class OperatorController {
   }
 
   @Get(':id')
-  @Roles(Role.admin, Role.support)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.admin, UserRole.support)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiNotFoundResponse({ type: ApiException })
@@ -82,8 +81,8 @@ export class OperatorController {
   }
 
   @Put()
-  @Roles(Role.admin, Role.support)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.admin, UserRole.support)
+  @UseGuards(AuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
@@ -97,8 +96,8 @@ export class OperatorController {
   }
 
   @Delete()
-  @Roles(Role.admin)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.admin)
+  @UseGuards(AuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiNotFoundResponse({ type: ApiException })

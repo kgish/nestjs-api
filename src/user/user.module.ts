@@ -10,6 +10,7 @@ import { OperatorEntity } from '../operator/operator.entity';
   imports: [TypeOrmModule.forFeature([UserEntity, OperatorEntity])],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService]
 })
 export class UserModule {
 }

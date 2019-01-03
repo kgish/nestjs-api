@@ -4,16 +4,13 @@ import { Repository } from 'typeorm';
 
 import { OperatorDto } from './dto/operator.dto';
 import { OperatorEntity } from './operator.entity';
-import { UserEntity } from '../user/user.entity';
 
 @Injectable()
 export class OperatorService {
 
   constructor(
     @InjectRepository(OperatorEntity)
-    private operatorRepository: Repository<OperatorEntity>,
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>) {
+    private operatorRepository: Repository<OperatorEntity>) {
   }
 
   async create(data: OperatorDto): Promise<OperatorEntity> {
