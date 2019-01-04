@@ -1,6 +1,8 @@
 import { Logger, Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from 'nestjs-config';
 
 import { AppController } from './app.controller';
@@ -33,6 +35,13 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
     ConfigModule.load(
       path.resolve(__dirname, 'config/**/*.{ts,js}'),
     ),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secretOrPrivateKey: process.env.JWT_SECRET || 'jwtsecret12345!',
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES || '30m'
+      },
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host,
