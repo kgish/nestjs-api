@@ -59,7 +59,7 @@ export class OperatorController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.admin, Role.support)
   @ApiOkResponse({ type: OperatorEntity, isArray: true })
   @ApiBadRequestResponse({ type: ApiException })

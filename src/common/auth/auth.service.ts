@@ -24,7 +24,7 @@ export class AuthService {
     // this.jwtOptions = { expiresIn: config.get('jwt.expires') };
     // this.jwtKey = config.get('jwt.secret');
     const expiresIn = process.env.JWT_EXPIRES || '30m';
-    const key = process.env.JWT_SECRET;
+    const key = process.env.JWT_SECRET || 'jwtsecret12345!';
     this.logger.log(`key='${key}', expiresIn='${expiresIn}'`);
     this.jwtOptions = { expiresIn };
     this.jwtKey = key;

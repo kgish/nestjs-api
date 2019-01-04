@@ -63,8 +63,8 @@ export class UserEntity extends BaseEntity {
 
   private get token() {
     const { id, username, role } = this;
-    const secret = process.env.JWT_SECRET;
-    const expiresIn = process.env.JWT_EXPIRES;
+    const secret = process.env.JWT_SECRET || 'jwtsecret12345!';
+    const expiresIn = process.env.JWT_EXPIRES || '30m';
     this.logger.log(`get token: id='${id}', username='${username}', role='${role}', secret='${secret}', expiresIn='${expiresIn}'`);
     return sign({
       id, username, role,
