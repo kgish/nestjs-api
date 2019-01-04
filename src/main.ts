@@ -50,7 +50,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  Logger.log(`Server running on ${hostDomain}`, 'bootstrap');
+  Logger.log(`Server running on ${hostDomain}/${prefix}`, 'bootstrap');
 }
 
 bootstrap();
