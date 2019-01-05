@@ -10,7 +10,6 @@ import { AppService } from './app.service';
 
 import { AuthService } from './common/auth/auth.service';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { JwtStrategy } from './common/auth/strategies/jwt-strategy.service';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { OperatorModule } from './operator/operator.module';
 import { UserModule } from './user/user.module';
@@ -68,8 +67,7 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
-    },
-    JwtStrategy,
+    }
   ],
 })
 export class AppModule {

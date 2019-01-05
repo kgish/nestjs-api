@@ -1,44 +1,34 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
-import { sign, SignOptions } from 'jsonwebtoken';
+import { Injectable, Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-// import { ConfigService } from 'nestjs-config';
-import 'dotenv/config';
-
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { UserService } from '../../user/user.service';
-import { JwtPayload } from './jwt-payload.model';
-import { UserRO } from '../../user/interfaces';
+import { Role } from '../../user/interfaces';
 
 @Injectable()
 export class AuthService {
-  private readonly jwtOptions: SignOptions;
-  private readonly jwtKey: string;
 
-  private logger: Logger;
+  logger: Logger;
 
-  constructor(
-    @Inject(forwardRef(() => UserService))
-    readonly userService: UserService,
-    // private readonly config: ConfigService,
-  ) {
+  constructor(private readonly jwtService: JwtService,
+              private readonly userService: UserService) {
     this.logger = new Logger('AuthService');
-    // this.jwtOptions = { expiresIn: config.get('jwt.expires') };
-    // this.jwtKey = config.get('jwt.secret');
+    this.logger.log('constructor()');
+  }
+
+  async createToken() {
+    const user: JwtPayload = { username: 'kiffin', role: Role.user };
+    const accessToken = this.jwtService.sign(user);
     const expiresIn = process.env.JWT_EXPIRES || '30m';
-    const key = process.env.JWT_SECRET || 'jwtsecret12345!';
-    this.logger.log(`key='${key}', expiresIn='${expiresIn}'`);
-    this.jwtOptions = { expiresIn };
-    this.jwtKey = key;
-  }
-
-  async signPayload(payload: JwtPayload): Promise<string> {
-    this.logger.log('signPayload');
-    return sign(payload, this.jwtKey, this.jwtOptions);
-  }
-
-  async validatePayload(validatePayload: JwtPayload): Promise<UserRO> {
-    const username = validatePayload.username;
-    const result = this.userService.findOneUsername(username);
-    this.logger.log(`validatePayload: username='${username}' => ${result}`);
+    const result = { expiresIn, accessToken };
+    this.logger.log(`createToken() => '${JSON.stringify(result)}'`);
     return result;
+  }
+
+  async validateUser(payload: JwtPayload): Promise<any> {
+     const username = payload.username;
+     const result = this.userService.findOneUsername(username);
+     this.logger.log(`validatePayload: username='${username}' => ${result}`);
+     return result;
   }
 }

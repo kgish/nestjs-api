@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import {
   BeforeInsert,
   Column,
@@ -6,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+// import { sign } from 'jsonwebtoken';
 
 import { UserRO, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
@@ -15,6 +16,7 @@ import { BaseEntity } from '../common/base.entity';
 // import { ConfigService } from 'nestjs-config';
 import 'dotenv/config';
 import { Logger } from '@nestjs/common';
+import { JwtPayload } from '../common/auth/interfaces/jwt-payload.interface';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -25,9 +27,10 @@ export class UserEntity extends BaseEntity {
   //   super();
   // }
 
-  constructor() {
+  constructor(private readonly jwtService: JwtService) {
     super();
     this.logger = new Logger('UsertEntity');
+    this.logger.log('constructor()');
   }
 
   @Column({ type: 'text', unique: true })
@@ -62,14 +65,11 @@ export class UserEntity extends BaseEntity {
   }
 
   private get token() {
-    const { id, username, role } = this;
-    const secret = process.env.JWT_SECRET || 'jwtsecret12345!';
-    const expiresIn = process.env.JWT_EXPIRES || '30m';
-    this.logger.log(`get token: id='${id}', username='${username}', role='${role}', secret='${secret}', expiresIn='${expiresIn}'`);
-    return sign({
-      id, username, role,
-    }, secret, { expiresIn });
-    // }, this.config.get('jwt.secret'), { expiresIn: this.config.get('jwt.expires') });
+    const { username, role } = this;
+    const payload: JwtPayload = { username, role };
+    const result = this.jwtService.sign(payload);
+    this.logger.log(`get token: payload='${JSON.stringify(payload)}' => '${result}'`);
+    return result;
   }
 
   static get modelName(): string {
