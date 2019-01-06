@@ -69,3 +69,4 @@ $ yarn migration:run
 * [Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
 * [PassportJS](http://www.passportjs.org)
 * [Faker](https://github.com/marak/Faker.js)
+* []
