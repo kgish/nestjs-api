@@ -69,6 +69,7 @@ http://localhost:3000/api/v1/docs/
 ```
 
 Note that for the authorization you will have to enter the following value:
+
 ```
 Bearer <TOKEN>
 ```

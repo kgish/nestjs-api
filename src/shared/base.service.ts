@@ -1,12 +1,19 @@
+// import 'automapper-ts/dist/automapper';
 import { BaseEntity } from './base.entity';
 import { Repository } from 'typeorm';
 
 export class BaseService<T extends BaseEntity> {
 
-  constructor(
-    public repository: Repository<T>,
-  ) {
+  constructor(public repository: Repository<T>) {
   }
+
+  // async map<K>(
+  //   object: Partial<InstanceType<T>> | Partial<InstanceType<T>>[],
+  //   sourceKey: string = this.modelName,
+  //   destinationKey: string = this.viewModelName,
+  // ): Promise<K> {
+  //   return this._mapper.map(sourceKey, destinationKey, object);
+  // }
 
   // async create(item: InstanceType<T>): Promise<InstanceType<T>> {
   //   return this.repository.create(item);

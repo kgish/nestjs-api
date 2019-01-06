@@ -64,6 +64,13 @@ export class UserService {
     const payload: JwtPayload = { username: user.username, role: user.role };
     const token = await this.authService.signPayload(payload);
 
+    // const userRO: UserRO = await this.map<UserRO>(user.toJSON());
+    //
+    // return {
+    //   user: userRO,
+    //   token,
+    // };
+
     return {
       user: {
         id: user.id,
@@ -86,6 +93,13 @@ export class UserService {
 
     const payload: JwtPayload = { username: user.username, role: user.role };
     const token = await this.authService.signPayload(payload);
+
+    // const userRO: UserRO = await this.map<UserRO>(user.toJSON());
+    //
+    // return {
+    //   user: userRO,
+    //   token,
+    // };
 
     return {
       user: {
