@@ -60,6 +60,19 @@ $ yarn migration:run
 
 ```
 
+## Swagger
+
+You can access the swagger docs via the following link:
+
+```
+http://localhost:3000/api/v1/docs/
+```
+
+Note that for the authorization you will have to enter the following value:
+```
+Bearer <TOKEN>
+```
+
 ## References
 
 * [NestJS](https://nestjs.com)
@@ -69,4 +82,5 @@ $ yarn migration:run
 * [Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
 * [PassportJS](http://www.passportjs.org)
 * [Faker](https://github.com/marak/Faker.js)
-* []
+* [AutomapperTS](https://github.com/loedeman/AutoMapper/wiki/Getting-started)
+* [Config](lorenwest/node-config)
