@@ -6,5 +6,4 @@ export class UserRO {
   role: Role;
   created: Date;
   updated: Date;
-  token?: string;
 }

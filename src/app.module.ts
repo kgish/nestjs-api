@@ -8,12 +8,11 @@ import { ConfigModule } from 'nestjs-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { AuthService } from './common/auth/auth.service';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { OperatorModule } from './operator/operator.module';
 import { UserModule } from './user/user.module';
-import { UserService } from './user/user.service';
+import { SharedModule } from './common/shared.module';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -41,6 +40,7 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
         expiresIn: process.env.JWT_EXPIRES || '30m'
       },
     }),
+    SharedModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host,
@@ -58,8 +58,6 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
   controllers: [AppController],
   providers: [
     AppService,
-    AuthService,
-    UserService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

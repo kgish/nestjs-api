@@ -33,7 +33,8 @@ import { ApiException } from '../common/api-exception';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../user/interfaces';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../common/auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiUseTags('operators')
@@ -47,7 +48,8 @@ export class OperatorController {
 
   @Post()
   @Roles(Role.admin)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(new JwtAuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
@@ -59,8 +61,9 @@ export class OperatorController {
   }
 
   @Get()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.admin, Role.support)
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity, isArray: true })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiForbiddenResponse({ type: ApiException })
@@ -71,7 +74,8 @@ export class OperatorController {
 
   @Get(':id')
   @Roles(Role.admin, Role.support)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiNotFoundResponse({ type: ApiException })
@@ -83,7 +87,8 @@ export class OperatorController {
 
   @Put()
   @Roles(Role.admin, Role.support)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(new JwtAuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
@@ -98,7 +103,8 @@ export class OperatorController {
 
   @Delete()
   @Roles(Role.admin)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @UseGuards(AuthGuard(), RolesGuard)
+  @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiNotFoundResponse({ type: ApiException })

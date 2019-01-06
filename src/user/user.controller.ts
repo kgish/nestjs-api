@@ -7,6 +7,8 @@ import { GetOperationId } from '../common/utilities/get-operation-id';
 import { ApiException } from '../common/api-exception';
 import { UserEntity } from './user.entity';
 import { UserRO } from './interfaces';
+import { UserLoginRO } from './interfaces/user-login-ro.interface';
+import { UserRegisterRO } from './interfaces/user-register-ro.interface';
 
 @Controller()
 export class UserController {
@@ -34,7 +36,7 @@ export class UserController {
   @ApiCreatedResponse({ type: UserRegisterDto })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiOperation(GetOperationId(UserEntity.modelName, 'Register'))
-  register(@Body() data: UserRegisterDto): Promise<UserRO> {
+  register(@Body() data: UserRegisterDto): Promise<UserRegisterRO> {
     return this.userService.register(data);
   }
 
@@ -44,7 +46,7 @@ export class UserController {
   @ApiCreatedResponse({ type: UserLoginDto })
   @ApiBadRequestResponse({ type: ApiException })
   @ApiOperation(GetOperationId(UserEntity.modelName, 'Login'))
-  login(@Body() data: UserLoginDto): Promise<UserRO> {
+  login(@Body() data: UserLoginDto): Promise<UserLoginRO> {
     return this.userService.login(data);
   }
 }

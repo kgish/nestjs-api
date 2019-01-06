@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -6,11 +6,17 @@ import { UserEntity } from './user.entity';
 import { UserRO, User, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
 import { UserRegisterDto, UserLoginDto } from './dto';
+import { JwtPayload } from '../common/auth/interfaces/jwt-payload.interface';
+import { AuthService } from '../common/auth/auth.service';
+import { UserLoginRO } from './interfaces/user-login-ro.interface';
+import { UserRegisterRO } from './interfaces/user-register-ro.interface';
 
 @Injectable()
 export class UserService {
 
   constructor(
+    @Inject(forwardRef(() => AuthService))
+    readonly authService: AuthService,
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     @InjectRepository(OperatorEntity)
@@ -38,7 +44,7 @@ export class UserService {
     return user.toResponseObject();
   }
 
-  async register(data: UserRegisterDto): Promise<UserRO> {
+  async register(data: UserRegisterDto): Promise<UserRegisterRO> {
     const { username } = data;
     let user = await this.userRepository.findOne({ where: { username } });
 
@@ -49,16 +55,28 @@ export class UserService {
     const createData: User = {
       username: data.username,
       password: data.password,
-      role: Role.user
+      role: Role.user,
     };
 
     user = await this.userRepository.create(createData);
     await this.userRepository.save(user);
 
-    return user.toResponseObject(true);
+    const payload: JwtPayload = { username: user.username, role: user.role };
+    const token = await this.authService.signPayload(payload);
+
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        created: user.created,
+        updated: user.updated,
+      },
+      token
+    };
   }
 
-  async login(data: UserLoginDto): Promise<UserRO> {
+  async login(data: UserLoginDto): Promise<UserLoginRO> {
     const { username, password } = data;
     const user = await this.userRepository.findOne({ where: { username } });
 
@@ -66,6 +84,19 @@ export class UserService {
       throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
     }
 
-    return user.toResponseObject(true);
+    const payload: JwtPayload = { username: user.username, role: user.role };
+    const token = await this.authService.signPayload(payload);
+
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        created: user.created,
+        updated: user.updated,
+      },
+      token
+    };
   }
 }
+
