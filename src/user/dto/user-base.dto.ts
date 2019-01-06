@@ -11,8 +11,4 @@ export class UserBaseDto {
   @IsNotEmpty()
   @ApiModelProperty()
   readonly password: string;
-
-  get modelName() {
-    return 'User';
-  }
 }

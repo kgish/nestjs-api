@@ -22,18 +22,19 @@ export class RolesGuard implements CanActivate {
     const roles = this.reflector.get<Role[]>('roles', context.getHandler());
 
     if (!roles || roles.length === 0) {
+      this.logger.log(`canActivate() roles='${JSON.stringify(roles)}' => true`);
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    const hasRole = () => user.roles.some((role) => !!roles.find((item) => item === role));
-
-    if (user && user.roles && hasRole()) {
+    if (user && user.role && roles.indexOf(user.role) !== -1) {
+      this.logger.log(`canActivate() user='${JSON.stringify(user)}', roles='${JSON.stringify(roles)}' => true`);
       return true;
     }
 
+    this.logger.log(`canActivate() user='${JSON.stringify(user)}', roles='${JSON.stringify(roles)}' => UNAUTHORIZED`);
     throw new HttpException('You do not have permission (roles)', HttpStatus.UNAUTHORIZED);
   }
 }
