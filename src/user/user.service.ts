@@ -6,8 +6,8 @@ import { UserEntity } from './user.entity';
 import { UserRO, User, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
 import { UserRegisterDto, UserLoginDto } from './dto';
-import { JwtPayload } from '../common/auth/interfaces/jwt-payload.interface';
-import { AuthService } from '../common/auth/auth.service';
+import { JwtPayload } from '../shared/auth/interfaces/jwt-payload.interface';
+import { AuthService } from '../shared/auth/auth.service';
 import { UserLoginRO } from './interfaces/user-login-ro.interface';
 import { UserRegisterRO } from './interfaces/user-register-ro.interface';
 

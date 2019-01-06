@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
-import { BaseEntity } from '../common/base.entity';
+import { BaseEntity } from '../shared/base.entity';
 
 @Entity('operator')
 export class OperatorEntity extends BaseEntity {

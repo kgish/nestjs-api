@@ -8,11 +8,11 @@ import { ConfigModule } from 'nestjs-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
+import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
 import { OperatorModule } from './operator/operator.module';
 import { UserModule } from './user/user.module';
-import { SharedModule } from './common/shared.module';
+import { SharedModule } from './shared/shared.module';
 
 import * as path from 'path';
 import * as fs from 'fs';

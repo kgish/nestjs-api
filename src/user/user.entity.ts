@@ -9,7 +9,7 @@ import { hash, compare } from 'bcryptjs';
 
 import { UserRO, Role } from './interfaces';
 import { OperatorEntity } from '../operator/operator.entity';
-import { BaseEntity } from '../common/base.entity';
+import { BaseEntity } from '../shared/base.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {

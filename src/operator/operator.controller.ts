@@ -27,14 +27,14 @@ import { OperatorService } from './operator.service';
 import { OperatorEntity } from './operator.entity';
 import { OperatorDto } from './dto/operator.dto';
 
-import { ValidationPipe } from '../common/pipes/validation.pipe';
-import { GetOperationId } from '../common/utilities/get-operation-id';
-import { ApiException } from '../common/api-exception';
-import { Roles } from '../common/decorators/roles.decorator';
+import { ValidationPipe } from '../shared/pipes/validation.pipe';
+import { GetOperationId } from '../shared/utilities/get-operation-id';
+import { ApiException } from '../shared/api-exception';
+import { Roles } from '../shared/decorators/roles.decorator';
 import { Role } from '../user/interfaces';
-import { RolesGuard } from '../common/guards/roles.guard';
+import { RolesGuard } from '../shared/guards/roles.guard';
 // import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from '../common/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../shared/auth/guards/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiUseTags('operators')

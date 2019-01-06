@@ -3,8 +3,8 @@ import { ApiUseTags, ApiBearerAuth, ApiCreatedResponse, ApiBadRequestResponse, A
 
 import { UserService } from './user.service';
 import { UserLoginDto, UserRegisterDto } from './dto';
-import { GetOperationId } from '../common/utilities/get-operation-id';
-import { ApiException } from '../common/api-exception';
+import { GetOperationId } from '../shared/utilities/get-operation-id';
+import { ApiException } from '../shared/api-exception';
 import { UserEntity } from './user.entity';
 import { UserRO } from './interfaces';
 import { UserLoginRO } from './interfaces/user-login-ro.interface';
