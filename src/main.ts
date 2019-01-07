@@ -24,6 +24,7 @@ async function bootstrap() {
     .addTag('root')
     .addTag('operators')
     .addTag('users')
+    .addTag('apis')
     .addBearerAuth('Authorization', 'header')
     .build();
 
