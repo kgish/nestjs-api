@@ -3045,9 +3045,9 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-nestjs-config@^1.2.9-alpha:
-  version "1.2.9-alpha"
-  resolved "https://registry.yarnpkg.com/nestjs-config/-/nestjs-config-1.2.9-alpha.tgz#5c3f1ae7078d6f6b554b5d99330f5f066dad38d2"
+nestjs-config@^1.2.9:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/nestjs-config/-/nestjs-config-1.2.9.tgz#8a19f55513136e169391674f36f53d66ea5df2bc"
   dependencies:
     dotenv "^6.0.0"
     glob "^7.1.2"
