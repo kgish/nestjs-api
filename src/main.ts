@@ -48,6 +48,8 @@ async function bootstrap() {
   app.setGlobalPrefix(prefix);
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  app.enableCors();
+
   await app.listen(port);
 
   Logger.log(`Server running on ${hostDomain}/${prefix}`, 'bootstrap');

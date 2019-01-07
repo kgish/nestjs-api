@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Logger, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
@@ -48,14 +48,14 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
       username,
       password,
       database,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [ __dirname + '/**/*.entity{.ts,.js}' ],
       synchronize,
       logging,
     }),
     OperatorModule,
     UserModule,
   ],
-  controllers: [AppController],
+  controllers: [ AppController ],
   providers: [
     AppService,
     {
@@ -68,6 +68,7 @@ const logging = process.env.DB_LOGGING ? process.env.DB_LOGGING === 'true' : tru
     }
   ],
 })
+// export class AppModule implements NestModule {
 export class AppModule {
   static host: string;
   static port: number;
@@ -102,4 +103,10 @@ export class AppModule {
     logger.log(`Database => ${JSON.stringify({ port, host, username, database, synchronize, logging })}`);
 
   }
+
+  // configure(consumer: MiddlewareConsumer): void {
+  //   consumer
+  //     .apply(CorsMiddleware)
+  //     .forRoutes( { path: '*', method: RequestMethod.ALL });
+  // }
 }
