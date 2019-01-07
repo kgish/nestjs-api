@@ -2,7 +2,7 @@
 
 ## Description
 
-Example REST-API server based on [Nest](https://github.com/nestjs/nest).
+Simple Mock Server for Testing the Compliancy Platform Client App, based on [Nest](https://github.com/nestjs/nest).
 
 ## Installation
 

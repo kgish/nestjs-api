@@ -48,7 +48,6 @@ export class OperatorController {
 
   @Post()
   @Roles(Role.admin)
-  // @UseGuards(AuthGuard(), RolesGuard)
   @UseGuards(new JwtAuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: OperatorEntity })
@@ -62,7 +61,6 @@ export class OperatorController {
 
   @Get()
   @Roles(Role.admin, Role.support)
-  // @UseGuards(AuthGuard(), RolesGuard)
   @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity, isArray: true })
   @ApiBadRequestResponse({ type: ApiException })
@@ -74,7 +72,6 @@ export class OperatorController {
 
   @Get(':id')
   @Roles(Role.admin, Role.support)
-  // @UseGuards(AuthGuard(), RolesGuard)
   @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
@@ -87,7 +84,6 @@ export class OperatorController {
 
   @Put()
   @Roles(Role.admin, Role.support)
-  // @UseGuards(AuthGuard(), RolesGuard)
   @UseGuards(new JwtAuthGuard(), RolesGuard)
   @UsePipes(new ValidationPipe())
   @ApiOkResponse({ type: OperatorEntity })
@@ -103,7 +99,6 @@ export class OperatorController {
 
   @Delete()
   @Roles(Role.admin)
-  // @UseGuards(AuthGuard(), RolesGuard)
   @UseGuards(new JwtAuthGuard(), RolesGuard)
   @ApiOkResponse({ type: OperatorEntity })
   @ApiBadRequestResponse({ type: ApiException })
